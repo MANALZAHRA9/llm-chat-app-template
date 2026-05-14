@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2D AI Image Generator</title>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial,sans-serif;
+    }
+
+    body{
+      background:#0f172a;
+      color:white;
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding:20px;
+    }
+
+    .container{
+      width:100%;
+      max-width:700px;
+      background:#111827;
+      border-radius:20px;
+      padding:30px;
+      box-shadow:0 10px 40px rgba(0,0,0,0.4);
+    }
+
+    h1{
+      text-align:center;
+      margin-bottom:25px;
+      color:#60a5fa;
+    }
+
+    .input-box{
+      display:flex;
+      gap:10px;
+      margin-bottom:20px;
+    }
+
+    input{
+      flex:1;
+      padding:15px;
+      border:none;
+      border-radius:12px;
+      outline:none;
+      font-size:16px;
+      background:#1e293b;
+      color:white;
+    }
+
+    button{
+      padding:15px 20px;
+      border:none;
+      border-radius:12px;
+      background:#2563eb;
+      color:white;
+      font-weight:bold;
+      cursor:pointer;
+      transition:0.3s;
+    }
+
+    button:hover{
+      background:#1d4ed8;
+    }
+
+    .image-box{
+      margin-top:20px;
+      text-align:center;
+    }
+
+    .image-box img{
+      width:100%;
+      max-width:500px;
+      border-radius:15px;
+      display:none;
+      margin:auto;
+      box-shadow:0 5px 20px rgba(0,0,0,0.5);
+    }
+
+    .loading{
+      display:none;
+      margin-top:15px;
+      color:#93c5fd;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>🎨 2D AI Image Generator</h1>
+
+  <div class="input-box">
+    <input
+      type="text"
+      id="prompt"
+      placeholder="Enter image prompt..."
+    >
+
+    <button onclick="generateImage()">
+      Generate
+    </button>
+  </div>
+
+  <div class="loading" id="loading">
+    Generating image...
+  </div>
+
+  <div class="image-box">
+    <img id="resultImage" src="">
+  </div>
+
+</div>
+
+<script>
+async function generateImage() {
+
+  const prompt = document.getElementById("prompt").value;
+  const image = document.getElementById("resultImage");
+  const loading = document.getElementById("loading");
+
+  if (!prompt) {
+    alert("Please enter a prompt");
+    return;
+  }
+
+  loading.style.display = "block";
+  image.style.display = "none";
+
+  try {
+
+    // Replace with your backend/API
+    const response = await fetch("YOUR_API_ENDPOINT", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        prompt: prompt
+      })
+    });
+
+    const data = await response.json();
+
+    // API should return image URL
+    image.src = data.image;
+
+    image.onload = () => {
+      loading.style.display = "none";
+      image.style.display = "block";
+    };
+
+  } catch (error) {
+
+    loading.style.display = "none";
+    alert("Error generating image");
+
+    console.error(error);
+  }
+}
+</script>
+
+</body>
+</html>
